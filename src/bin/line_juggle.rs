@@ -9,11 +9,7 @@ use rand::{thread_rng, Rng};
 
 fn main() {
     let mut rng = thread_rng();
-    let mut skip_lines: bool = false;
-
-    if std::env::args().last().unwrap() == "skip" {
-        skip_lines = true;
-    }
+    let skip_lines: bool = std::env::args().last().unwrap() == "skip";
 
     if let Ok(files) = read_dir("img") {
         for file in files {
@@ -51,7 +47,7 @@ fn main() {
                 place += 1;
             };
 
-            img_trash::save_and_open_file(&file.path(), new_img);
+            img_trash::save_and_open_file(&file.path(), &new_img);
         }
     }
 }

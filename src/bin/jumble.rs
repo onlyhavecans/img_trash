@@ -27,7 +27,7 @@ fn main() {
         let mut new_img = img.clone();
 
         let size = img.pixels().count();
-        let edit_count = size.clone();
+        let edit_count = size;
         println!("Editing {} pixels", edit_count);
 
         for _ in 0..edit_count {

@@ -17,7 +17,7 @@ pub fn get_files_from_args() -> Vec<PathBuf> {
     files
 }
 
-pub fn save_and_open_file(old_filename: &Path, image_data: DynamicImage) {
+pub fn save_and_open_file(old_filename: &Path, image_data: &DynamicImage) {
     let filename = old_filename.file_stem().unwrap().to_str().unwrap();
     let new_file = format!("img_out/{}.png", filename);
     let new_file = new_file.as_str();
