@@ -1,0 +1,8 @@
+[package]
+name = "img_trash"
+version = "0.1.0"
+authors = ["David Aronsohn <WagThatTail@Me.com>"]
+
+[dependencies]
+image = "*"
+rand = "0.3"
