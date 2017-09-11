@@ -9,6 +9,12 @@ use rand::{thread_rng, Rng};
 
 fn main() {
     let mut rng = thread_rng();
+    let mut skip_lines: bool = false;
+
+    if std::env::args().last().unwrap() == "skip" {
+        skip_lines = true;
+    }
+
     if let Ok(files) = read_dir("img") {
         for file in files {
             let file = file.unwrap();
@@ -34,11 +40,15 @@ fn main() {
 
             let mut place: u32 = 0;
             for line in shuffled_lines {
+                if skip_lines && place % 2 == 0 {
+                    place += 1;
+                    continue;
+                }
                 for scan in 0..length {
                     let pixel = img.get_pixel(scan, *line);
                     new_img.put_pixel(scan, place, pixel);
                 }
-                place = place + 1;
+                place += 1;
             };
 
             img_trash::save_and_open_file(&file.path(), new_img);

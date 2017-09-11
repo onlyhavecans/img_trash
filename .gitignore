@@ -2,3 +2,4 @@
 **/*.rs.bk
 
 img_out/*.png
+img_trash.iml
