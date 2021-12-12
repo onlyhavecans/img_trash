@@ -1,9 +1,7 @@
-extern crate image;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::env;
 use std::process::Command;
-
 use image::DynamicImage;
 
 pub fn get_files_from_args() -> Vec<PathBuf> {

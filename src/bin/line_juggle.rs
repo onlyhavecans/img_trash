@@ -1,11 +1,7 @@
-extern crate image;
-extern crate rand;
-extern crate img_trash;
-
-use std::fs::read_dir;
-
 use image::{GenericImage, DynamicImage};
-use rand::{thread_rng, Rng};
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+use std::fs::read_dir;
 
 fn main() {
     let mut rng = thread_rng();
@@ -27,12 +23,11 @@ fn main() {
 
             let mut new_img = img.clone();
 
-            let mut range: Vec<u32> = Vec::new();
+            let mut shuffled_lines: Vec<u32> = Vec::new();
             for n in 0..width {
-                range.push(n);
+                shuffled_lines.push(n);
             };
-            let shuffled_lines = &mut range[..];
-            rng.shuffle(shuffled_lines);
+            shuffled_lines.shuffle(&mut rng);
 
             let mut place: u32 = 0;
             for line in shuffled_lines {
@@ -41,7 +36,7 @@ fn main() {
                     continue;
                 }
                 for scan in 0..length {
-                    let pixel = img.get_pixel(scan, *line);
+                    let pixel = img.get_pixel(scan, line);
                     new_img.put_pixel(scan, place, pixel);
                 }
                 place += 1;

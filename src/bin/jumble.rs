@@ -1,7 +1,3 @@
-extern crate image;
-extern crate rand;
-extern crate img_trash;
-
 use std::fs::File;
 use std::path::Path;
 use std::process::Command;
@@ -31,10 +27,10 @@ fn main() {
         println!("Editing {} pixels", edit_count);
 
         for _ in 0..edit_count {
-            let source_length = rng.gen_range(1, length);
-            let source_width = rng.gen_range(1, width);
-            let destination_length = rng.gen_range(1, length);
-            let destination_width = rng.gen_range(1, width);
+            let source_length = rng.gen_range(1..length);
+            let source_width = rng.gen_range(1..width);
+            let destination_length = rng.gen_range(1..length);
+            let destination_width = rng.gen_range(1..width);
 
             let pixel = img.get_pixel(source_length, source_width);
             new_img.put_pixel(destination_length,destination_width, pixel);

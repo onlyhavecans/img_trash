@@ -1,8 +1,8 @@
 [package]
 name = "img_trash"
-version = "0.1.0"
-authors = ["David Aronsohn <WagThatTail@Me.com>"]
+version = "0.1.1"
+edition = "2021"
 
 [dependencies]
-image = "*"
-rand = "0.3"
+image = "0.18"
+rand = "0.8"
