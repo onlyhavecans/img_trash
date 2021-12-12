@@ -21,8 +21,15 @@ fn main() {
             }
         };
 
+        let filename = file.file_name().into_string().unwrap();
+
+        println!("Scrambling {}", filename);
         let new_img = shuffle_image_contents(image, skip_lines);
+
+        println!("Done Scrambing {}, Saving!", filename);
         img_trash::save_and_open_file(&path, &new_img);
+
+        println!("Done with {}", filename);
     }
 }
 
@@ -38,16 +45,14 @@ fn shuffle_image_contents(img: DynamicImage, skip_lines: bool) -> DynamicImage {
     let mut shuffled_lines: Vec<u32> = (0..height).collect();
     shuffled_lines.shuffle(&mut rng);
 
-    let mut place_in_old: u32 = 0;
-    for line in shuffled_lines {
-        if skip_lines && place_in_old % 2 == 0 {
-            place_in_old += 1;
+    for y in 0..height {
+        if skip_lines && y % 2 == 0 {
             continue;
         }
+        let shuffled_y: u32 = shuffled_lines[y as usize];
         for x in 0..width {
-            new_img.put_pixel(x, place_in_old, img.get_pixel(x, line));
+            new_img.put_pixel(x, y, img.get_pixel(x, shuffled_y));
         }
-        place_in_old += 1;
-    };
+    }
     new_img
 }

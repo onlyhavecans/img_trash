@@ -19,7 +19,7 @@ pub fn save_and_open_file(old_filename: &Path, image_data: &DynamicImage) {
     let filename = old_filename.file_stem().unwrap().to_str().unwrap();
     let new_file = format!("img_out/{}.png", filename);
     let new_file = new_file.as_str();
-    println!("filename {}", new_file);
+    println!("Writing file {}", new_file);
     let file_out = &mut File::create(&Path::new(new_file)).unwrap();
 
     image_data.save(file_out, image::PNG).unwrap();
