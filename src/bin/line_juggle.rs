@@ -1,4 +1,4 @@
-use image::{GenericImage, DynamicImage};
+use image::{GenericImage, DynamicImage, GenericImageView};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::env::args;

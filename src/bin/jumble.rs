@@ -1,19 +1,21 @@
-use std::fs::File;
-use std::path::Path;
-use std::process::Command;
+use std::fs::read_dir;
 
-use image::GenericImage;
+use image::{GenericImage, GenericImageView};
 use rand::{thread_rng, Rng};
 
 fn main() {
     let mut rng = thread_rng();
-    let files = img_trash::get_files_from_args()
-        .expect("No files found");
+    let files = read_dir("img")
+        .unwrap()
+        .filter_map(|f| f.ok());
+
     for file in files {
-        let img = match image::open(file) {
+        let path = file.path();
+        let filename = file.file_name().into_string().unwrap();
+        let img = match image::open(&path) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping because of {:?}", e);
+                println!("!! Skipping {} because of {:?}", filename, e);
                 continue;
             }
         };
@@ -37,10 +39,6 @@ fn main() {
             new_img.put_pixel(destination_length,destination_width, pixel);
         }
 
-        let fout = &mut File::create(&Path::new("test.png")).unwrap();
-
-        // Write the contents of this image to the Writer in PNG format.
-        new_img.save(fout, image::PNG).unwrap();
-        Command::new("open").arg("test.png").spawn().expect("couldn't open");
+        img_trash::save_and_open_file(&path, &new_img);
     }
 }
