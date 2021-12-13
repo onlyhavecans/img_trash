@@ -1,7 +1,7 @@
-use std::path::{Path};
-use std::env;
-use std::process::Command;
 use image::DynamicImage;
+use std::env;
+use std::path::Path;
+use std::process::Command;
 
 pub fn get_files_from_args() -> Option<Vec<String>> {
     let files = env::args()
@@ -10,7 +10,7 @@ pub fn get_files_from_args() -> Option<Vec<String>> {
         .collect::<Vec<String>>();
     match files.is_empty() {
         true => None,
-        false => Some(files)
+        false => Some(files),
     }
 }
 
@@ -23,5 +23,8 @@ pub fn save_and_open_file(old_filename: &Path, image_data: &DynamicImage) {
     println!("Writing file {}", new_file);
 
     image_data.save(new_file_path).unwrap();
-    Command::new("open").arg(new_file).spawn().expect("couldn't open");
+    Command::new("open")
+        .arg(new_file)
+        .spawn()
+        .expect("couldn't open");
 }

@@ -1,13 +1,10 @@
-use std::fs::read_dir;
-
 use image::{GenericImage, GenericImageView};
 use rand::{thread_rng, Rng};
+use std::fs::read_dir;
 
 fn main() {
     let mut rng = thread_rng();
-    let files = read_dir("img")
-        .unwrap()
-        .filter_map(|f| f.ok());
+    let files = read_dir("img").unwrap().filter_map(|f| f.ok());
 
     for file in files {
         let path = file.path();
@@ -20,7 +17,12 @@ fn main() {
             }
         };
         let (width, height) = img.dimensions();
-        println!("dimensions {} by {}; color {:?}", width, height, img.color());
+        println!(
+            "dimensions {} by {}; color {:?}",
+            width,
+            height,
+            img.color()
+        );
 
         let mut new_img = img.clone();
 
@@ -45,7 +47,7 @@ fn main() {
             let destination_height = rng.gen_range(0..height);
 
             let pixel = img.get_pixel(source_width, source_height);
-            new_img.put_pixel(destination_width,destination_height, pixel);
+            new_img.put_pixel(destination_width, destination_height, pixel);
         }
 
         img_trash::save_and_open_file(&path, &new_img);

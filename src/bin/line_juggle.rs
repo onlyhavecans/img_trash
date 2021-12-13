@@ -1,4 +1,4 @@
-use image::{GenericImage, DynamicImage, GenericImageView};
+use image::{DynamicImage, GenericImage, GenericImageView};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::env::args;
@@ -7,9 +7,7 @@ use std::fs::read_dir;
 fn main() {
     let skip_lines: bool = args().last().unwrap() == "skip";
 
-    let files = read_dir("img")
-        .unwrap()
-        .filter_map(|f| f.ok());
+    let files = read_dir("img").unwrap().filter_map(|f| f.ok());
 
     for file in files {
         let path = file.path();
@@ -36,7 +34,12 @@ fn shuffle_image_contents(img: DynamicImage, skip_lines: bool) -> DynamicImage {
     let mut rng = thread_rng();
 
     let (width, height) = img.dimensions();
-    println!("Dimensions {} by {} with color {:?}", width, height, img.color());
+    println!(
+        "Dimensions {} by {} with color {:?}",
+        width,
+        height,
+        img.color()
+    );
 
     let mut new_img = img.clone();
 
