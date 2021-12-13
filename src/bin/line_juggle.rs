@@ -13,15 +13,14 @@ fn main() {
 
     for file in files {
         let path = file.path();
+        let filename = file.file_name().into_string().unwrap();
         let image = match image::open(&path) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping because of {:?}", e);
+                println!("!! Skipping {} because of {:?}", filename, e);
                 continue;
             }
         };
-
-        let filename = file.file_name().into_string().unwrap();
 
         println!("Scrambling {}", filename);
         let new_img = shuffle_image_contents(image, skip_lines);
@@ -37,8 +36,7 @@ fn shuffle_image_contents(img: DynamicImage, skip_lines: bool) -> DynamicImage {
     let mut rng = thread_rng();
 
     let (width, height) = img.dimensions();
-    println!("dimensions {} by {}", width, height);
-    println!("{:?}", img.color());
+    println!("Dimensions {} by {} with color {:?}", width, height, img.color());
 
     let mut new_img = img.clone();
 

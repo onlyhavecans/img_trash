@@ -7,8 +7,9 @@ use rand::{thread_rng, Rng};
 
 fn main() {
     let mut rng = thread_rng();
-    for file in img_trash::get_files_from_args() {
-
+    let files = img_trash::get_files_from_args()
+        .expect("No files found");
+    for file in files {
         let img = match image::open(file) {
             Ok(i) => i,
             Err(e) => {
