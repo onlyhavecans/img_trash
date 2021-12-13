@@ -19,24 +19,33 @@ fn main() {
                 continue;
             }
         };
-        let (length, width) = img.dimensions();
-        println!("dimensions {} by {}", length, width);
-        println!("{:?}", img.color());
+        let (width, height) = img.dimensions();
+        println!("dimensions {} by {}; color {:?}", width, height, img.color());
 
         let mut new_img = img.clone();
 
-        let size = img.pixels().count();
-        let edit_count = size;
-        println!("Editing {} pixels", edit_count);
+        let pixel_count = img.pixels().count();
+        println!("Editing {} pixels", &pixel_count);
 
-        for _ in 0..edit_count {
-            let source_length = rng.gen_range(1..length);
-            let source_width = rng.gen_range(1..width);
-            let destination_length = rng.gen_range(1..length);
-            let destination_width = rng.gen_range(1..width);
+        /* This was is pure nose, cool but not as much as the other one
+        for x in 0..width {
+            for y in 0..height {
+                let source_width = rng.gen_range(0..width);
+                let source_height = rng.gen_range(0..height);
 
-            let pixel = img.get_pixel(source_length, source_width);
-            new_img.put_pixel(destination_length,destination_width, pixel);
+                new_img.put_pixel(x, y, img.get_pixel(source_width, source_height));
+            }
+        }
+        */
+
+        for _ in 0..pixel_count {
+            let source_width = rng.gen_range(0..width);
+            let source_height = rng.gen_range(0..height);
+            let destination_width = rng.gen_range(0..width);
+            let destination_height = rng.gen_range(0..height);
+
+            let pixel = img.get_pixel(source_width, source_height);
+            new_img.put_pixel(destination_width,destination_height, pixel);
         }
 
         img_trash::save_and_open_file(&path, &new_img);
