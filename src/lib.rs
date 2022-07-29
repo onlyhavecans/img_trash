@@ -18,7 +18,7 @@ pub fn get_files_from_args() -> Option<Vec<String>> {
 }
 
 pub fn save_and_open_file(old_file: &Path, image_data: &DynamicImage) -> Result<()> {
-    // this validator saves a lot or error handling later
+    // this validator saves error handling later
     if !old_file.is_file() {
         bail!("{} is not a file!", old_file.to_string_lossy())
     }
