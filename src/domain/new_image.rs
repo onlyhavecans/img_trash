@@ -15,9 +15,9 @@ impl NewImage {
         let filename = match path.file_name() {
             Some(i) => i
                 .to_str()
-                .ok_or(anyhow!("Cannot convert to string {:?}", i))?
+                .ok_or_else(|| anyhow!("Cannot convert to string {:?}", i))?
                 .to_string(),
-            None => anyhow::bail!("Not a file .; {:?}", path),
+            None => anyhow::bail!("Not a file; {:?}", path),
         };
         let image = image::open(&path)?;
         let e = NewImage {
