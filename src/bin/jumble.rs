@@ -9,6 +9,8 @@ fn main() {
     let files = dir.filter_map(|f| f.ok());
 
     for file in files {
+        println!("Opening {}", file.file_name().to_string_lossy());
+
         let n = match NewImage::parse(file.path()) {
             Ok(i) => i,
             Err(e) => {

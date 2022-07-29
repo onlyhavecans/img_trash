@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Result};
 use image::DynamicImage;
 use std::path::PathBuf;
 
@@ -11,13 +11,17 @@ pub struct NewImage {
 
 impl NewImage {
     pub fn parse(f: PathBuf) -> Result<NewImage> {
+        if !f.is_file() {
+            bail!("{} is not a file!", f.to_string_lossy())
+        }
+
         let path = f;
         let filename = match path.file_name() {
             Some(i) => i
-                .to_str()
-                .ok_or_else(|| anyhow!("Cannot convert to string {:?}", i))?
-                .to_string(),
-            None => anyhow::bail!("Not a file; {:?}", path),
+                .to_os_string()
+                .into_string()
+                .map_err(|e| anyhow!("to_string failed on {}", e.to_string_lossy()))?,
+            None => anyhow::bail!("{} is not a file", path.to_string_lossy()),
         };
         let image = image::open(&path)?;
         let e = NewImage {

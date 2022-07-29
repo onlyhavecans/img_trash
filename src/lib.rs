@@ -1,6 +1,6 @@
 pub mod domain;
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{bail, Result};
 use image::DynamicImage;
 use std::path::Path;
 use std::process::Command;
@@ -17,27 +17,23 @@ pub fn get_files_from_args() -> Option<Vec<String>> {
     }
 }
 
-pub fn save_and_open_file(old_filename: &Path, image_data: &DynamicImage) -> Result<()> {
-    let filename = old_filename
-        .file_stem()
-        .ok_or_else(|| anyhow!("no filename for {:?}", old_filename))?
-        .to_str()
-        .ok_or_else(|| anyhow!("Unable to str OsStr{:?}", old_filename))?;
-    let new_file = format!("{}.png", filename);
-    let new_file = new_file.as_str();
+pub fn save_and_open_file(old_file: &Path, image_data: &DynamicImage) -> Result<()> {
+    // this validator saves a lot or error handling later
+    if !old_file.is_file() {
+        bail!("{} is not a file!", old_file.to_string_lossy())
+    }
+
     let out_path = Path::new("img_out");
-    let new_file_path = out_path.join(Path::new(new_file));
+    fs::create_dir_all(out_path)?;
 
-    println!("Writing file {}", new_file);
+    let out_format = "png";
+    let new_file_type = old_file.with_extension(out_format);
+    let new_file_path = out_path.join(new_file_type.file_name().unwrap());
+    let new_file_name = new_file_path.to_string_lossy();
 
-    fs::create_dir_all(out_path).context("Could not create output directory {}")?;
-    image_data
-        .save(new_file_path.as_os_str())
-        .context(format!("Could not save output to {}", new_file))?;
-    Command::new("open")
-        .arg(new_file_path)
-        .spawn()
-        .context(format!("couldn't open {}", new_file))?;
+    println!("Writing file {new_file_name}");
 
+    image_data.save(new_file_path.as_os_str())?;
+    Command::new("open").arg(new_file_path).spawn()?;
     Ok(())
 }
