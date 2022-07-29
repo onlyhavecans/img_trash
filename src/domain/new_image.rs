@@ -32,14 +32,17 @@ impl NewImage {
 #[cfg(test)]
 mod tests {
     use super::NewImage;
-    use claim::{assert_err, assert_ok};
+    use claim::assert_err;
     use std::path::PathBuf;
 
     #[test]
     fn valid_file_converts() {
         let f: PathBuf = ["img", "me.jpg"].iter().collect();
         let i = NewImage::parse(f);
-        assert_ok!(i);
+        let u = i.unwrap();
+        assert_eq!(["img", "me.jpg"].iter().collect::<PathBuf>(), u.path);
+        assert_eq!("me.jpg", u.filename);
+        assert_eq!(1024, u.image.width());
     }
 
     #[test]
