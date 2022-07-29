@@ -32,14 +32,16 @@ impl NewImage {
 #[cfg(test)]
 mod tests {
     use super::NewImage;
-    use claim::assert_err;
     use std::path::PathBuf;
 
     #[test]
     fn valid_file_converts() {
         let f: PathBuf = ["img", "me.jpg"].iter().collect();
         let i = NewImage::parse(f);
+
+        assert!(i.is_ok());
         let u = i.unwrap();
+
         assert_eq!(["img", "me.jpg"].iter().collect::<PathBuf>(), u.path);
         assert_eq!("me.jpg", u.filename);
         assert_eq!(1024, u.image.width());
@@ -48,14 +50,12 @@ mod tests {
     #[test]
     fn not_an_image() {
         let f: PathBuf = ["src", "lib.rs"].iter().collect();
-        let i = NewImage::parse(f);
-        assert_err!(i);
+        assert!(NewImage::parse(f).is_err())
     }
 
     #[test]
     fn file_does_not_exist() {
         let f: PathBuf = ["does", "not.exist"].iter().collect();
-        let i = NewImage::parse(f);
-        assert_err!(i);
+        assert!(NewImage::parse(f).is_err())
     }
 }

@@ -7,6 +7,3 @@ edition = "2021"
 image = "0.24"
 rand = "0.8"
 anyhow = "1.0"
-
-[dev-dependencies]
-claim = "0.5"
