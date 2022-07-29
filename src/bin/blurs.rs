@@ -1,4 +1,5 @@
-use img_trash::domain::NewImage;
+use img_trash::image::save_and_open_file;
+use img_trash::image::NewImage;
 use std::fs;
 
 fn main() {
@@ -19,7 +20,7 @@ fn main() {
         let new_img = new_img.blur(10.0);
 
         println!("Done Scrambling {}, Saving!", n.filename);
-        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+        if let Err(e) = save_and_open_file(&n.path, &new_img) {
             println!("Unable to save and open {}! Err: {}", n.filename, e)
         }
 

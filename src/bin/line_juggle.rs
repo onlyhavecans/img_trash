@@ -1,5 +1,6 @@
 use image::{DynamicImage, GenericImage, GenericImageView};
-use img_trash::domain::NewImage;
+use img_trash::image::save_and_open_file;
+use img_trash::image::NewImage;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::env::args;
@@ -24,7 +25,7 @@ fn main() {
         let new_img = shuffle_image_contents(n.image, skip_lines);
 
         println!("Done Scrambling {}, Saving!", n.filename);
-        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+        if let Err(e) = save_and_open_file(&n.path, &new_img) {
             println!("Unable to save and open {}! Err: {}", n.filename, e)
         }
 

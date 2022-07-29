@@ -1,5 +1,6 @@
 use image::{GenericImage, GenericImageView};
-use img_trash::domain::NewImage;
+use img_trash::image::save_and_open_file;
+use img_trash::image::NewImage;
 use rand::{thread_rng, Rng};
 use std::fs;
 
@@ -54,7 +55,7 @@ fn main() {
             new_img.put_pixel(destination_width, destination_height, pixel);
         }
 
-        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+        if let Err(e) = save_and_open_file(&n.path, &new_img) {
             println!("Unable to save and open {}! Err: {}", n.filename, e)
         }
     }
