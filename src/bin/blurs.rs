@@ -1,26 +1,28 @@
-use std::fs::read_dir;
+use img_trash::domain::NewImage;
+use std::fs;
 
 fn main() {
-    let files = read_dir("img").unwrap().filter_map(|f| f.ok());
+    let dir = fs::read_dir("img").expect("Unable to read from img");
+    let files = dir.filter_map(|f| f.ok());
 
     for file in files {
-        let path = file.path();
-        let filename = file.file_name().into_string().unwrap();
-        let image = match image::open(&path) {
+        let n = match NewImage::parse(file) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping {} because of {:?}", filename, e);
+                println!("!! Skipping file: {}", e);
                 continue;
             }
         };
 
-        println!("Scrambling {}", filename);
-        let new_img = image.thumbnail(200, 200);
+        println!("Scrambling {}", n.filename);
+        let new_img = n.image.thumbnail(200, 200);
         let new_img = new_img.blur(10.0);
 
-        println!("Done Scrambing {}, Saving!", filename);
-        img_trash::save_and_open_file(&path, &new_img);
+        println!("Done Scrambling {}, Saving!", n.filename);
+        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+            println!("Unable to save and open {}! Err: {}", n.filename, e)
+        }
 
-        println!("Done with {}", filename);
+        println!("Done with {}", n.filename);
     }
 }

@@ -1,21 +1,23 @@
 use image::{GenericImage, GenericImageView};
+use img_trash::domain::NewImage;
 use rand::{thread_rng, Rng};
-use std::fs::read_dir;
+use std::fs;
 
 fn main() {
     let mut rng = thread_rng();
-    let files = read_dir("img").unwrap().filter_map(|f| f.ok());
+    let dir = fs::read_dir("img").expect("Unable to read from img");
+    let files = dir.filter_map(|f| f.ok());
 
     for file in files {
-        let path = file.path();
-        let filename = file.file_name().into_string().unwrap();
-        let img = match image::open(&path) {
+        let n = match NewImage::parse(file) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping {} because of {:?}", filename, e);
+                println!("!! Skipping file: {}", e);
                 continue;
             }
         };
+        let img = n.image;
+
         let (width, height) = img.dimensions();
         println!(
             "dimensions {} by {}; color {:?}",
@@ -50,6 +52,8 @@ fn main() {
             new_img.put_pixel(destination_width, destination_height, pixel);
         }
 
-        img_trash::save_and_open_file(&path, &new_img);
+        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+            println!("Unable to save and open {}! Err: {}", n.filename, e)
+        }
     }
 }

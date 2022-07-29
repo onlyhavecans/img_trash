@@ -1,32 +1,34 @@
 use image::{DynamicImage, GenericImage, GenericImageView};
+use img_trash::domain::NewImage;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::env::args;
-use std::fs::read_dir;
+use std::fs;
 
 fn main() {
-    let skip_lines: bool = args().last().unwrap() == "skip";
+    let skip_lines: bool = args().last() == Some("skip".to_string());
 
-    let files = read_dir("img").unwrap().filter_map(|f| f.ok());
+    let dir = fs::read_dir("img").expect("Unable to read from img");
+    let files = dir.filter_map(|f| f.ok());
 
     for file in files {
-        let path = file.path();
-        let filename = file.file_name().into_string().unwrap();
-        let image = match image::open(&path) {
+        let n = match NewImage::parse(file) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping {} because of {:?}", filename, e);
+                println!("!! Skipping file: {}", e);
                 continue;
             }
         };
 
-        println!("Scrambling {}", filename);
-        let new_img = shuffle_image_contents(image, skip_lines);
+        println!("Scrambling {}", n.filename);
+        let new_img = shuffle_image_contents(n.image, skip_lines);
 
-        println!("Done Scrambing {}, Saving!", filename);
-        img_trash::save_and_open_file(&path, &new_img);
+        println!("Done Scrambling {}, Saving!", n.filename);
+        if let Err(e) = img_trash::save_and_open_file(&n.path, &new_img) {
+            println!("Unable to save and open {}! Err: {}", n.filename, e)
+        }
 
-        println!("Done with {}", filename);
+        println!("Done with {}", n.filename);
     }
 }
 
