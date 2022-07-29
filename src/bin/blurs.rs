@@ -6,7 +6,7 @@ fn main() {
     let files = dir.filter_map(|f| f.ok());
 
     for file in files {
-        let n = match NewImage::parse(file) {
+        let n = match NewImage::parse(file.path()) {
             Ok(i) => i,
             Err(e) => {
                 println!("!! Skipping file: {}", e);
