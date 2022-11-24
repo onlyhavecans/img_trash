@@ -1,6 +1,6 @@
 name: Rust
 
-"on":
+on:
   push:
     branches: [main]
   pull_request:
@@ -10,33 +10,56 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  lint:
-    name: cargo clippy
+  fmt:
+    name: Rustfmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get cargo version
+        run: cargo --version
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          components: clippy
-      - run: cargo clippy -- -D warnings
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Get cargo version
+        run: cargo --version
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
 
   test:
-    name: cargo test
+    name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - run: cargo test
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  # Check formatting with rustfmt
-  formatting:
-    name: cargo fmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      # Ensure rustfmt is installed and setup problem matcher
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          components: rustfmt
-      - name: Rustfmt Check
-        uses: actions-rust-lang/rustfmt@v1
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Get cargo version
+        run: cargo --version
+      - name: Run cargo test
+        run: cargo test
