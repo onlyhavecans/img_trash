@@ -1,11 +1,11 @@
 use image::{GenericImage, GenericImageView};
 use img_trash::image::save_and_open_file;
 use img_trash::image::NewImage;
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 use std::fs;
 
 fn main() {
-    let mut rng = thread_rng();
+    let mut rng = rng();
     let dir = fs::read_dir("img").expect("Unable to read from img");
     let files = dir.filter_map(|f| f.ok());
 
@@ -37,8 +37,8 @@ fn main() {
         /* This was is pure nose, cool but not as much as the other one
         for x in 0..width {
             for y in 0..height {
-                let source_width = rng.gen_range(0..width);
-                let source_height = rng.gen_range(0..height);
+                let source_width = rng.random_range(0..width);
+                let source_height = rng.random_range(0..height);
 
                 new_img.put_pixel(x, y, img.get_pixel(source_width, source_height));
             }
@@ -46,10 +46,10 @@ fn main() {
         */
 
         for _ in 0..pixel_count {
-            let source_width = rng.gen_range(0..width);
-            let source_height = rng.gen_range(0..height);
-            let destination_width = rng.gen_range(0..width);
-            let destination_height = rng.gen_range(0..height);
+            let source_width = rng.random_range(0..width);
+            let source_height = rng.random_range(0..height);
+            let destination_width = rng.random_range(0..width);
+            let destination_height = rng.random_range(0..height);
 
             let pixel = img.get_pixel(source_width, source_height);
             new_img.put_pixel(destination_width, destination_height, pixel);
