@@ -1,8 +1,8 @@
 use image::{DynamicImage, GenericImage, GenericImageView};
 use img_trash::image::save_and_open_file;
 use img_trash::image::NewImage;
+use rand::rng;
 use rand::seq::SliceRandom;
-use rand::thread_rng;
 use std::env::args;
 use std::fs;
 
@@ -34,7 +34,7 @@ fn main() {
 }
 
 fn shuffle_image_contents(img: DynamicImage, skip_lines: bool) -> DynamicImage {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let (width, height) = img.dimensions();
     println!(
