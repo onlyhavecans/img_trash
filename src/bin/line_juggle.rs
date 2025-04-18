@@ -1,13 +1,13 @@
 use image::{DynamicImage, GenericImage, GenericImageView};
-use img_trash::image::save_and_open_file;
 use img_trash::image::NewImage;
+use img_trash::image::save_and_open_file;
 use rand::rng;
 use rand::seq::SliceRandom;
 use std::env::args;
 use std::fs;
 
 fn main() {
-    let skip_lines: bool = args().last() == Some("skip".to_string());
+    let skip_lines: bool = args().next_back() == Some("skip".to_string());
 
     let dir = fs::read_dir("img").expect("Unable to read from img");
     let files = dir.filter_map(|f| f.ok());
