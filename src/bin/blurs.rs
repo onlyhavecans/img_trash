@@ -10,7 +10,7 @@ fn main() {
         let n = match NewImage::parse(file.path()) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping file: {}", e);
+                println!("!! Skipping file: {e}");
                 continue;
             }
         };
