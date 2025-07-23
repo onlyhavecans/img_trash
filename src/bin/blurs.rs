@@ -1,5 +1,5 @@
-use img_trash::image::save_and_open_file;
 use img_trash::image::NewImage;
+use img_trash::image::save_and_open_file;
 use std::fs;
 
 fn main() {
