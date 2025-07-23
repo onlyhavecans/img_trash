@@ -1,4 +1,4 @@
-use anyhow::{anyhow, bail, Result};
+use anyhow::{Result, anyhow, bail};
 use image::DynamicImage;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -35,6 +35,27 @@ impl NewImage {
     }
 }
 
+pub fn save_and_open_file(old_file: &Path, image_data: &DynamicImage) -> Result<()> {
+    // this validator saves error handling later
+    if !old_file.is_file() {
+        bail!("{} is not a file!", old_file.to_string_lossy())
+    }
+
+    let out_path = Path::new("img_out");
+    fs::create_dir_all(out_path)?;
+
+    let out_format = "png";
+    let new_file_type = old_file.with_extension(out_format);
+    let new_file_path = out_path.join(new_file_type.file_name().unwrap());
+    let new_file_name = new_file_path.to_string_lossy();
+
+    println!("Writing file {new_file_name}");
+
+    image_data.save(new_file_path.as_os_str())?;
+    Command::new("open").arg(new_file_path).spawn()?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::NewImage;
@@ -64,25 +85,4 @@ mod tests {
         let f: PathBuf = ["does", "not.exist"].iter().collect();
         assert!(NewImage::parse(f).is_err())
     }
-}
-
-pub fn save_and_open_file(old_file: &Path, image_data: &DynamicImage) -> Result<()> {
-    // this validator saves error handling later
-    if !old_file.is_file() {
-        bail!("{} is not a file!", old_file.to_string_lossy())
-    }
-
-    let out_path = Path::new("img_out");
-    fs::create_dir_all(out_path)?;
-
-    let out_format = "png";
-    let new_file_type = old_file.with_extension(out_format);
-    let new_file_path = out_path.join(new_file_type.file_name().unwrap());
-    let new_file_name = new_file_path.to_string_lossy();
-
-    println!("Writing file {new_file_name}");
-
-    image_data.save(new_file_path.as_os_str())?;
-    Command::new("open").arg(new_file_path).spawn()?;
-    Ok(())
 }

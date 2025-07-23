@@ -1,7 +1,7 @@
 use image::{GenericImage, GenericImageView};
-use img_trash::image::save_and_open_file;
 use img_trash::image::NewImage;
-use rand::{rng, Rng};
+use img_trash::image::save_and_open_file;
+use rand::{Rng, rng};
 use std::fs;
 
 fn main() {
@@ -15,7 +15,7 @@ fn main() {
         let n = match NewImage::parse(file.path()) {
             Ok(i) => i,
             Err(e) => {
-                println!("!! Skipping file: {}", e);
+                println!("!! Skipping file: {e}");
                 continue;
             }
         };
