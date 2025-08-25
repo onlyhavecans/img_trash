@@ -1,5 +1,8 @@
 # img_trash
 
+![ci](https://onlyhavecans.works/onlyhavecans/img_trash/badges/workflows/rust.yml/badge.svg)
+
+
 Just me playing with destroying and making odd art with images for fun and non-profit.
 
 This is mostly me playing with rust and the compiler.
