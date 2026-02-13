@@ -1,7 +1,7 @@
 use image::{GenericImage, GenericImageView};
 use img_trash::image::NewImage;
 use img_trash::image::save_and_open_file;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use std::fs;
 
 fn main() {
