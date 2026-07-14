@@ -32,7 +32,7 @@ fn main() {
         let mut new_img = img.clone();
 
         let pixel_count = img.pixels().count();
-        println!("Editing {} pixels", &pixel_count);
+        println!("Editing {} pixels", pixel_count);
 
         /* This was is pure nose, cool but not as much as the other one
         for x in 0..width {
